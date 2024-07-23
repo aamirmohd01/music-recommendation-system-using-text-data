@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emotion Detection using Text</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Madimi+One&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  </head>
+  <style>
+    .write {
+      overflow: hidden; /* Ensures the content is not revealed until the animation */
+      white-space: nowrap; /* Keeps the content on a single line */
+      margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+      animation: typing 1s steps(30, end), blink-caret 0.5s step-end infinite;
+    }
+
+    /* The typing effect */
+    @keyframes typing {
+      from {
+        width: 0%;
+        border-right: 5px solid white;
+      }
+      to {
+        width: 100%;
+        border-right: 5px solid white;
+      }
+    }
+
+    /* The typewriter cursor effect */
+    @keyframes blink-caret {
+      from,
+      to {
+        border-color: transparent;
+      }
+
+      50% {
+        border-color: white;
+      }
+    }
+    div.songInfo {
+      display: flex;
+      color: white;
+      flex-direction: column;
+      margin: 10px;
+      width: 60%;
+    }
+    div#songSetDiv {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    div.songDiv {
+      display: flex;
+      align-items: center;
+      width: 90%;
+      justify-content: center;
+      padding: 0px 25px;
+    }
+    div.songNumDiv {
+      padding: 10px;
+      color: white;
+    }
+    svg.like_svg {
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+    }
+    svg.like_svg:hover {
+      transform: scale(1.2);
+    }
+    div.songDiv:hover {
+      background-color: #2d2d2d;
+    }
+    .artistName {
+      font-size: small;
+    }
+  </style>
+
+  <body style="background: linear-gradient(#242424, #121212)">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: end">
+        <a href="/logout" style="color: white; text-decoration: none"
+          ><div
+            style="
+              padding: 5px 10px;
+              border: 1px white solid;
+              border-radius: 3px;
+              margin-top: 5px;
+            "
+          >
+            Logout
+          </div></a
+        >
+      </div>
+      <div class="row">
+        <div
+          class="col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12 offset-sm-0 col-xs-12 offset-xs-0"
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+              min-height: 100vh;
+            "
+          >
+            <div
+              class="mb-4"
+              style="
+                border: 1px solid rgb(226, 232, 236);
+                border-radius: 5px;
+                width: 90%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                padding: 25px 0px;
+              "
+            >
+              <header>
+                <div>
+                  <h1
+                    style="
+                      font-size: 45px;
+                      font-family: 'Chakra Petch', sans-serif;
+                      font-weight: 700;
+                      font-style: normal;
+                      text-align: center;
+                      color: white;
+                    "
+                  >
+                    Emotion Detection using Text
+                  </h1>
+                </div>
+              </header>
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 100%;
+                  flex-direction: column;
+                "
+              >
+                <form
+                  action="/"
+                  method="post"
+                  class="mt-4"
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    flex-direction: column;
+                  "
+                >
+                  <div class="mb-3" style="width: 60%">
+                    <textarea
+                      ng-model="review"
+                      style="resize: none; font-weight: 500"
+                      class="form-control"
+                      id="para"
+                      rows="4"
+                      placeholder="Enter Text Here"
+                      name="para"
+                    ></textarea>
+                    <!-- <button style="position: ;">Enter</button> -->
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      id="serbtn"
+                      class="btn btn-success"
+                      style="font-weight: bold"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+                <div class="mt-4">
+                  <div
+                    id="spinner"
+                    class="spinner-border text-light"
+                    role="status"
+                    style="display: none"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p
+                    id="result"
+                    class="write"
+                    style="
+                      font-weight: bold;
+                      font-size: xx-large;
+                      color: rgb(238, 229, 240);
+                    "
+                  ></p>
+                </div>
+
+                <div
+                  id="songSetDiv"
+                  style="
+                    width: 80%;
+                    color: white;
+                    font-family: Helvetica Neue, helvetica, arial,
+                      Hiragino Kaku Gothic ProN, Meiryo, MS Gothic;
+                  "
+                  class="mt-5"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    $(document).ready(function () {
+      $("#songSetDiv").hide();
+      $("#serbtn").click(function () {
+        var para = $("#para").val();
+        $("#songSetDiv").empty();
+        $("#result").hide();
+        $("#spinner").show();
+        $.ajax({
+          url: "/",
+          type: "POST",
+          data: {
+            para: para,
+          },
+          success: function (response) {
+            $("#spinner").hide();
+            $("#result").show();
+
+            // $("#result").text(response);
+            $("#result").text(
+              "Your Emotion is : " + response.predicted_emotion
+            );
+            $("#result").on("animationend", function () {
+              $("#songSetDiv").empty();
+              $("#songSetDiv").html(
+                "<h3 style='text-align: center'>Here are the songs recommended for you</h3>"
+              );
+              $.each(response.results, function (index, result) {
+                var col = response.liked_songs[index] ? "#1ed760" : "white";
+                var songInfo =
+                  '<div class="songDiv" style="height:56px;">' +
+                  '<div class="songNumDiv">' +
+                  (index + 1) +
+                  "</div>" +
+                  '<div class="songInfo">' +
+                  '<span class="songName" style="font-weight:700;">' +
+                  result.song_title +
+                  "</span> " +
+                  '<span class="artistName">' +
+                  result.artist +
+                  "</span>" +
+                  "</div>" +
+                  '<span class="like_span" style="float:right;width:20%;text-align: center;"><svg class="like_svg" data-song-id="' +
+                  result.song_id +
+                  '" fill="#000000" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="' +
+                  col +
+                  '" d="M14 20.408c-.492.308-.903.546-1.192.709-.153.086-.308.17-.463.252h-.002a.75.75 0 01-.686 0 16.709 16.709 0 01-.465-.252 31.147 31.147 0 01-4.803-3.34C3.8 15.572 1 12.331 1 8.513 1 5.052 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262A31.146 31.146 0 0114 20.408z"/></svg></span>' +
+                  "</div>";
+                $("#songSetDiv").append(songInfo);
+              });
+              $("#songSetDiv").show();
+            });
+          },
+        });
+      });
+    });
+    // Event delegation for dynamically added elements
+    $(document).on("click", ".like_svg", function () {
+      var songId = $(this).data("song-id");
+      var heartPath = $(this).find("path");
+      var isLiked = heartPath.attr("fill") === "#1ed760";
+      // Example AJAX for toggling like/unlike status
+      $.ajax({
+        type: "POST",
+        url: "/toggle_like", // Replace with your backend endpoint for toggling like/unlike
+        data: {
+          song_id: songId,
+          action: isLiked ? "unlike" : "like",
+        },
+        success: function (response) {
+          if (response.success) {
+            heartPath.attr("fill", isLiked ? "white" : "#1ed760");
+          } else {
+            console.error("Failed to toggle like status.");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error toggling like status:", error);
+        },
+      });
+    });
+  </script>
+</html>
